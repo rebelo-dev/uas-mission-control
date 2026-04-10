@@ -13,4 +13,37 @@ export class DroneService {
             },
         });
     }
+
+    async create(data: { name: string }) {
+        return this.prisma.drone.create({
+            data: {
+                name: data.name,
+                status: 'OFFLINE',
+                lastSeen: new Date(),
+            },
+        });
+    }
+
+    async findOne(id: string) {
+        return this.prisma.drone.findUnique({
+            where: { id },
+            include: {
+                telemetry: true,
+                alerts: true,
+            },
+        });
+    }
+
+    async update(id: string, data: any) {
+        return this.prisma.drone.update({
+            where: { id },
+            data,
+        });
+    }
+
+    async delete(id: string) {
+        return this.prisma.drone.delete({
+            where: { id },
+        });
+    }
 }
