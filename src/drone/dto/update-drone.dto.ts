@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
 
 enum DroneStatus {
     ONLINE = 'ONLINE',
@@ -9,6 +9,8 @@ enum DroneStatus {
 export class UpdateDroneDto {
     @IsOptional()
     @IsString()
+    @IsNotEmpty()
+    @MinLength(2)
     name?: string;
 
     @IsOptional()
