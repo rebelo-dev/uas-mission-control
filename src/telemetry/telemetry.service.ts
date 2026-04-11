@@ -9,7 +9,7 @@ export class TelemetryService {
 
 
   async create(droneId: string, dto: CreateTelemetryDto) {
-    // 1. guarantees that the drone exists
+    // guarantees that the drone exists
     const drone = await this.prisma.drone.findUnique({
       where: { id: droneId },
     });
@@ -18,7 +18,7 @@ export class TelemetryService {
       throw new NotFoundException('Drone not found');
     }
 
-    // 2. history (histórico)
+    // history (histórico)
     const telemetry = await this.prisma.telemetry.create({
       data: {
         droneId,
@@ -26,7 +26,7 @@ export class TelemetryService {
       },
     });
 
-    // 3.updates drone status
+    // updates drone status
     await this.prisma.drone.update({
       where: { id: droneId },
       data: {
@@ -35,6 +35,59 @@ export class TelemetryService {
       },
     });
 
+
+    // dangerous speed
+    if (dto.speed > 80) {
+      await this.prisma.alert.create({
+        data: {
+          droneId,
+          type: 'SPEED',
+          message: 'Speed exceeded',
+          severity: 'HIGH',
+        },
+      });
+    }
+
+    // drone is too slow
+    if (dto.speed < 5) {
+      await this.prisma.alert.create({
+        data: {
+          droneId,
+          type: 'SPEED',
+          message: 'Drone speed is too low, possibly stalled',
+          severity: 'MEDIUM',
+        },
+      });
+    }
+
+    // dangerous altitude - the type is defined as geofence for practical terms (geofence is a perimeter for longitude and altitude, but im including altitude as well just for simplicity, in a 3d space, this would make more sense)
+    if (dto.altitude && dto.altitude > 500) {
+      await this.prisma.alert.create({
+        data: {
+          droneId,
+          type: 'GEOFENCE',
+          message: 'Altitude too high',
+          severity: 'MEDIUM',
+        },
+      });
+    }
+
+    // dangerous altitude - the type is defined as geofence for practical terms (geofence is a perimeter for longitude and altitude, but im including altitude as well just for simplicity, in a 3d space, this would make more sense)
+    if (dto.altitude !== undefined && dto.altitude < 100) {
+      await this.prisma.alert.create({
+        data: {
+          droneId,
+          type: 'GEOFENCE',
+          message: 'Altitude too low',
+          severity: 'MEDIUM',
+        },
+      });
+    }
+
+    // OFFLINE alert (to do)
+
+
+    // These alert rules are examples as proof of concept, they work as an event drive system, it receives data, processes it and produces a response by creating an alert (via prisma)
     return telemetry;
   }
 
@@ -44,5 +97,4 @@ export class TelemetryService {
       //orderBy: { createdAt: 'desc' },
     });
   }
-
 }
