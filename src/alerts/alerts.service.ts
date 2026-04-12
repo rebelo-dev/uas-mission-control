@@ -28,6 +28,63 @@ export class AlertsService {
       where: { id }
     });
   }
+
+  async createHighSpeedAlert(droneId: string) {
+    return this.prisma.alert.create({
+      data: {
+        droneId,
+        type: 'SPEED',
+        message: 'Speed is dangerously high',
+        severity: 'HIGH',
+      },
+    });
+  }
+
+  async createLowSpeedAlert(droneId: string) {
+    return this.prisma.alert.create({
+      data: {
+        droneId,
+        type: 'SPEED',
+        message: 'Speed is dangerously low',
+        severity: 'MEDIUM',
+      },
+    });
+
+  }
+
+  async createHighAltitudeAlert(droneId: string) {
+    return this.prisma.alert.create({
+      data: {
+        droneId,
+        type: 'GEOFENCE',
+        message: 'Altitude is dangerously high',
+        severity: 'MEDIUM',
+      },
+    });
+  }
+
+  async createLowAltitudeAlert(droneId: string) {
+    return this.prisma.alert.create({
+      data: {
+        droneId,
+        type: 'GEOFENCE',
+        message: 'Altitude is dangerously low',
+        severity: 'HIGH',
+      },
+    });
+  }
+
+  async createOfflineAlert(droneId: string) {
+    return this.prisma.alert.create({
+      data: {
+        droneId,
+        type: 'OFFLINE',
+        message: 'Drone is offline',
+        severity: 'HIGH',
+      },
+    });
+  }
+
 }
 
 
