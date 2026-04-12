@@ -28,3 +28,7 @@ export class TelemetryController {
     return this.telemetryService.findByDrone(droneId);
   }
 }
+//these routes are labeled as drones/id/telemetry, but they are actually still telemetry routes,
+//as they are related to telemetry data and not drones themselves,
+//since there is no route for drones/id, or just drones for a find all, there should be no conflict here.
+//line 5, i labeled it as drones, but this only says, hey, the routes in this controller start with this prefix as well.
