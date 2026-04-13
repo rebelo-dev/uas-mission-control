@@ -1,0 +1,256 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: uas
+meta:
+  id: wrk_7b04445cdb0c4dd185517493fa66c661
+  created: 1775776050378
+  modified: 1775776050378
+  description: ""
+collection:
+  - url: http://localhost:3000/drones
+    name: GET ALL DRONES
+    meta:
+      id: req_77cec21e46ac4a1a8fa00ed6351d7c8f
+      created: 1775776067074
+      modified: 1775872707532
+      isPrivate: false
+      description: ""
+      sortKey: -1775776067074
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones
+    name: POST DRONES
+    meta:
+      id: req_55960744f6b544f6bed0b969a1199f8d
+      created: 1775848219805
+      modified: 1776031952389
+      isPrivate: false
+      description: ""
+      sortKey: -1775848219805
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "UAV AR5 TEST UNIT"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones/61f5a5ce-b3ab-4c23-bd7e-23b539aed8fc
+    name: GET DRONE
+    meta:
+      id: req_2129e91a9626485ca88ebdb65c53af7a
+      created: 1775848482532
+      modified: 1776031971061
+      isPrivate: false
+      description: ""
+      sortKey: -1775848482532
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones/014a1259-1dcf-4421-95c0-2c4937e8bfad
+    name: PATCH DRONE
+    meta:
+      id: req_ebe17500f45742f08c3c4ee8dbe406dc
+      created: 1775848748939
+      modified: 1775872673035
+      isPrivate: false
+      description: ""
+      sortKey: -1775848748939
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": ""
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones/cdbed49a-3ce8-4fd5-8f23-7ce0beacc30d
+    name: DELETE DRONE
+    meta:
+      id: req_a1e3d7b2999749ac91fbe6a7a46ab7e1
+      created: 1775848840846
+      modified: 1775872667686
+      isPrivate: false
+      description: ""
+      sortKey: -1775848840846
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones/ad3cbb22-9667-4e7e-8b41-c5dd6d36aab4/telemetry
+    name: POST DRONE TELEMETRY
+    meta:
+      id: req_26b5f0da8bbf4c3aa1ec07c3e96468cf
+      created: 1775872712403
+      modified: 1776029578587
+      isPrivate: false
+      description: ""
+      sortKey: -1775872712403
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "lat": 39.61,
+          "lng": -9.07,
+          "speed": 55,
+          "altitude": 120
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/drones/61f5a5ce-b3ab-4c23-bd7e-23b539aed8fc/telemetry
+    name: GET DRONE TELEMETRY
+    meta:
+      id: req_95d42622d6114a3cbcd2641a830204c9
+      created: 1775872737893
+      modified: 1776031993154
+      isPrivate: false
+      description: ""
+      sortKey: -1775872737893
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/alerts/
+    name: GET ALL ALERTS
+    meta:
+      id: req_856ad97892d240d4a33e4e5ee9737ad6
+      created: 1775930902372
+      modified: 1776029428631
+      isPrivate: false
+      description: ""
+      sortKey: -1775930902372
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/alerts/drone/61f5a5ce-b3ab-4c23-bd7e-23b539aed8fc
+    name: GET DRONE ALERTS
+    meta:
+      id: req_24c2d7fb51874e64895e6d727ca09d24
+      created: 1776029248034
+      modified: 1776032221841
+      isPrivate: false
+      description: ""
+      sortKey: -1776029248034
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_67ae3638feb1ed015e3356b50d8d0ea8d7f44e6c
+    created: 1775776050403
+    modified: 1775776050403
+environments:
+  name: Base Environment
+  meta:
+    id: env_67ae3638feb1ed015e3356b50d8d0ea8d7f44e6c
+    created: 1775776050400
+    modified: 1775776050400
+    isPrivate: false
