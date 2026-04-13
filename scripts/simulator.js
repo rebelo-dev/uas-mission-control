@@ -26,6 +26,8 @@ setInterval(async () => {
 
 }, 5000);
 
+// MUST STOP MANNUALLY; OR IT RUNS FOREVER! ctrl+c to stop
+
 /*
 
 Core Idea for dynamic data generation

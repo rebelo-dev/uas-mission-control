@@ -1,98 +1,204 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚁 UAS Mission Control API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend system for managing drones (UAS), telemetry data, and real-time alert generation.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Built with
+- NestJS
+- Prisma ORM
+- PostgreSQL
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Overview
 
-## Project setup
+This project simulates a drone monitoring system where:
 
-```bash
-$ npm install
+- Drones send telemetry data like location, speed, altitude
+- The system stores telemetry history
+- Alerts are automatically generated based on rules
+- A script that mimics drone behavior
+
+---
+
+## Database (v1) concept
+
+```
+### Drone - Generic management
+ 
+model Drone {
+  id        String   @id @default(uuid())
+  name      String
+  status    String
+  lastSeen  DateTime
+  createdAt DateTime @default(now())
+
+  telemetry Telemetry[]
+  alerts    Alert[]
+}
+
+### Telemetry - data ingestion & processing
+
+model Telemetry {
+  id        String   @id @default(uuid())
+  droneId   String
+  lat       Float
+  lng       Float
+  speed     Float
+  altitude  Float?
+  createdAt DateTime @default(now())
+
+  drone Drone @relation(fields: [droneId], references: [id])
+}
+
+### Alert - alert creation & querying  
+
+model Alert {
+  id        String   @id @default(uuid())
+  droneId   String
+  type      AlertType
+  message   String
+  severity  AlertSeverity
+  createdAt DateTime @default(now())
+
+  drone Drone @relation(fields: [droneId], references: [id])
+}
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## Data Flow
 
-# watch mode
-$ npm run start:dev
+1. Drone sends telemetry → `POST /drones/:id/telemetry`  
+2. Telemetry is stored (Telemetry data is directly attached to a drone)
+3. Drone status is updated (ONLINE + lastSeen)  
+4. Alerts are created automatically upon rule validation
 
-# production mode
-$ npm run start:prod
+---
+
+## Alert Rules (V1)
+
+- Speed > 80 → **HIGH alert**
+- Speed < 5 → **MEDIUM alert**
+- Altitude > 500 → **MEDIUM alert**
+- Altitude < 100 → **HIGH alert**
+
+1. These values are purely representative.
+
+---
+
+## API Routes
+
+```
+### Drones
+
+GET    /drones
+GET    /drones/:id
+POST   /drones
+PATCH  /drones/:id
+DELETE /drones/:id
+
+
+### Telemetry
+
+POST   /drones/:id/telemetry
+GET    /drones/:id/telemetry
+
+
+### Alerts
+
+GET    /alerts
+GET    /alerts/:id
+GET    /alerts/drone/:id
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## Simulator
 
-# e2e tests
-$ npm run test:e2e
+A js script which core concept is to:
 
-# test coverage
-$ npm run test:cov
+- Fetch a drone by ID
+- Initializes variables like speed, longigute, latitude and altitude
+- Speed increases from 0 → 100 by 5 units per cycle (loop)  
+- Lat/Lng randomized slightly  
+- Altitude randomized  
+- Posts to telemetry every 5 seconds
+
+---
+
+## Design Decisions for this version
+
+### 1. Alerts 
+
+- Generated automatically  
+- Triggered by telemetry events  
+- Event driven approach
+
+---
+
+### 2. Applied Separation of Concerns Pattern
+
+**Before Alerts Module:**
+```
+Telemetry → Prisma → Alert
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+**After Alert Module:**
+```
+Telemetry → AlertsService → Prisma
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Prisma
 
-## Resources
+Decided to adopt Prisma V7 ORM, which requires an adapter in order to connect to database. This is requires a different configuration than lts versions which are based on older architectures. 
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Setup
 
-## Support
+```
+npm install
+npx prisma generate
+npx prisma migrate dev
+npm run start:dev
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## "Testing"
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. Create a drone (just a name will do)
+2. Grab uuid and paste it into the simulator
+3. Run simulator "node scripts/simulator.js"
 
-## License
+Check telemetry:
+```
+GET /drones/:id/telemetry
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Check alerts:
+```
+GET /alerts/drone/:id
+```
+
+---
+
+## Future Improvements (V2)
+
+### Core Features
+- Missions system  
+- Drone health monitoring   
+- Simulator reviews for like multi-drone support and end loop (fix) as it needs to be stopped manually at current time (v1). 
+- Real time events with maybe websockets, emmitters or streaming updates(?)
+- JWT authentication with role based access (admin/operator)
+- A frontend interface
+- Tests (E2E) 
+- CI/CD pipeline explorarion
+
+---
+
+## 👨‍💻 Author
+
+João Rebelo
+
+---
