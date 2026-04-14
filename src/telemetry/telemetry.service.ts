@@ -129,6 +129,7 @@ export class TelemetryService {
     return this.prisma.telemetry.findMany({
       where: { droneId },
       orderBy: { createdAt: 'desc' },
+      take: 16,
     });
   }
 }

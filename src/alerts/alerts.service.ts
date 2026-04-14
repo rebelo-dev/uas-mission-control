@@ -12,6 +12,7 @@ export class AlertsService {
     return this.prisma.alert.findMany({
       where: { droneId },
       orderBy: { createdAt: 'desc' },
+      take: 16,
     });
   }
 
