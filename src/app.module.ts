@@ -6,9 +6,13 @@ import { DroneModule } from './drone/drone.module';
 import { TelemetryModule } from './telemetry/telemetry.module';
 import { AlertsModule } from './alerts/alerts.module';
 import { SimulationModule } from './simulation/simulation.module';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
-  imports: [PrismaModule,
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
     DroneModule,
     TelemetryModule,
     AlertsModule,
