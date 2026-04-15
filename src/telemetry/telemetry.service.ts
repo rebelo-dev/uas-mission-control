@@ -41,17 +41,17 @@ export class TelemetryService {
 
 
     // dangerous speed - no undefined check because speed is reset as 0 in the simulator once we get 100 speed
-    if (dto.speed > 80) {
+    if (dto.speed > 64) {
       await this.alertService.createHighSpeedAlert(droneId);
-    } else if (dto.speed < 5) {
+    } else if (dto.speed < 8) {
       await this.alertService.createLowSpeedAlert(droneId);
     }
 
 
     // dangerous altitude - this type is defined as geofence por simplicity.
-    if (dto.altitude !== undefined && dto.altitude > 500) {
+    if (dto.altitude !== undefined && dto.altitude > 135) {
       await this.alertService.createHighAltitudeAlert(droneId);
-    } else if (dto.altitude !== undefined && dto.altitude < 100) {
+    } else if (dto.altitude !== undefined && dto.altitude < 115) {
       await this.alertService.createLowAltitudeAlert(droneId);
     }
 

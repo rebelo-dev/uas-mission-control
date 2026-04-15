@@ -11,7 +11,7 @@ export class SimulationService {
 
         const interval = setInterval(async () => {
             speed += 5;
-            if (speed > 100) speed = 0;
+            if (speed > 80) speed = 0;
 
             const telemetry = {
                 lat: 39.6 + Math.random() * 0.01,
