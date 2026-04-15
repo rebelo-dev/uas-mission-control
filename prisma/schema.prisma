@@ -31,7 +31,7 @@ model Telemetry {
   altitude  Float?
   createdAt DateTime @default(now())
 
-  drone Drone @relation(fields: [droneId], references: [id])
+  drone Drone @relation(fields: [droneId], references: [id], onDelete: Cascade)
 }
 
 model Alert {
@@ -42,7 +42,7 @@ model Alert {
   severity  AlertSeverity
   createdAt DateTime      @default(now())
 
-  drone Drone @relation(fields: [droneId], references: [id])
+  drone Drone @relation(fields: [droneId], references: [id], onDelete: Cascade)
 }
 
 enum DroneStatus {

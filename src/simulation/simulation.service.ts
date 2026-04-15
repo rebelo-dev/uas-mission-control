@@ -1,10 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+
 
 @Injectable()
 export class SimulationService {
+
+    constructor(
+        private prisma: PrismaService,
+    ) { }
     private intervals = new Map<string, NodeJS.Timeout>();
 
-    start(droneId: string) {
+    async stop(droneId: string) {
+
+        const interval = this.intervals.get(droneId);
+        if (interval) {
+            clearInterval(interval);
+            this.intervals.delete(droneId);
+        }
+
+        await this.prisma.drone.update({
+            where: { id: droneId },
+            data: {
+                lastSeen: new Date(),
+                status: 'OFFLINE',
+            },
+        });
+    }
+
+
+    async start(droneId: string) {
         if (this.intervals.has(droneId)) return;
 
         let speed = 0;
@@ -32,11 +56,5 @@ export class SimulationService {
         this.intervals.set(droneId, interval);
     }
 
-    stop(droneId: string) {
-        const interval = this.intervals.get(droneId);
-        if (interval) {
-            clearInterval(interval);
-            this.intervals.delete(droneId);
-        }
-    }
+
 }
