@@ -9,5 +9,6 @@ import { AlertsModule } from 'src/alerts/alerts.module';
   controllers: [TelemetryController],
   providers: [TelemetryService],
   imports: [PrismaModule, AlertsModule],
+  exports: [TelemetryService],
 })
 export class TelemetryModule { }
