@@ -24,7 +24,7 @@ export class PrismaService
 
 }
 
-console.log("DATABASE_URL =", process.env.DATABASE_URL);
-const connectionString = process.env.DATABASE_URL;
+//console.log("DATABASE_URL =", process.env.DATABASE_URL);
+//const connectionString = process.env.DATABASE_URL;
 
-console.log("CONNEXTION STRING", connectionString);
+//console.log("CONNEXTION STRING", connectionString);
